@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- ✅ Bootstrap 5 CDN (por si no está en base.html) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(-45deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+        background-size: 400% 400%;
+        animation: gradientMove 10s ease infinite;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .auth-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        padding: 2.5rem 2rem;
+        width: 100%;
+        max-width: 450px;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .auth-card .title {
+        text-align: center;
+        color: #6b21a8;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-form input,
+    .auth-form select {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #d6bbfb;
+        border-radius: 0.6rem;
+        font-size: 1rem;
+    }
+
+    .auth-form input:focus,
+    .auth-form select:focus {
+        outline: none;
+        border-color: #9333ea;
+        box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
+    }
+
+    .btn-primary {
+        background-color: #9333ea;
+        border: none;
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 0.6rem;
+        color: white;
+        transition: 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #7e22ce;
+        transform: scale(1.02);
+        box-shadow: 0 8px 15px rgba(147, 51, 234, 0.3);
+    }
+
+    .muted {
+        text-align: center;
+        font-size: 0.95rem;
+        margin-top: 1rem;
+        color: #555;
+    }
+
+    .btn-ghost {
+        color: #6b21a8;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .btn-ghost:hover {
+        text-decoration: underline;
+    }
+
+    .flash {
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .success {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .error {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="title">Crear Cuenta</h2>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                {% for categoria, mensaje in mensajes %}
+                    <div class="flash {{ categoria }}">{{ mensaje }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" class="auth-form">
+            <input type="text" name="nombre" placeholder="Nombre completo" required>
+
+            <!-- 🔥 Selector de Rol (antes del correo) -->
+            <select name="rol" required>
+                <option value="" disabled selected>Selecciona un rol</option>
+                <option value="usuario">Cliente</option>
+                <option value="admin">Administrador</option>
+            </select>
+
+            <input type="email" name="correo" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="btn-primary">Registrar</button>
+        </form>
+
+        <p class="muted">
+            ¿Ya tienes cuenta?
+            <a href="{{ url_for('login') }}" class="btn-ghost">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+
+<!-- ✅ Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(-45deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .admin-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 50px auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        max-width: 800px;
+        width: 100%;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .admin-card h2 {
+        color: #6b21a8;
+        font-weight: bold;
+    }
+
+    .btn-sm {
+        border-radius: 8px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="admin-card">
+    <h2 class="mb-4">👥 Gestión de Clientes</h2>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.correo }}</td>
+                <td>
+                    <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                
+                    {% if usuario.estado == 'activo' %}
+                        <form action="{{ url_for('desactivar_usuario', id=usuario.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">🚫 Desactivar</button>
+                        </form>
+                    {% else %}
+                        <form action="{{ url_for('activar_usuario', id=usuario.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-success btn-sm">✅ Activar</button>
+                        </form>
+                    {% endif %}
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mt-3">⬅️ Volver al Panel</a>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- ✅ Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(-45deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+        background-size: 400% 400%;
+        animation: gradientBackground 10s ease infinite;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @keyframes gradientBackground {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .productos-container {
+        min-height: 100vh;
+        padding: 3rem 1rem;
+    }
+
+    .titulo {
+        text-align: center;
+        color: #6b21a8;
+        margin-bottom: 2.5rem;
+        font-weight: 800;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .card-producto {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        padding: 1.2rem;
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .card-producto:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card-producto img {
+        border-radius: 0.8rem;
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        margin-bottom: 1rem;
+    }
+
+    .precio {
+        color: #9333ea;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .acciones-btn a {
+        border-radius: 0.6rem;
+        font-weight: 600;
+        padding: 6px 14px;
+        transition: all 0.3s ease;
+    }
+
+    .acciones-btn a:hover {
+        transform: scale(1.05);
+    }
+
+    .btn-warning {
+        background-color: #facc15;
+        border: none;
+        color: black;
+    }
+
+    .btn-danger {
+        background-color: #ef4444;
+        border: none;
+        color: white;
+    }
+
+    .btn-add {
+        display: inline-block;
+        margin-bottom: 2rem;
+        background: #9333ea;
+        color: white;
+        padding: 0.8rem 1.6rem;
+        font-weight: bold;
+        border-radius: 0.6rem;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-add:hover {
+        background: #7e22ce;
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="productos-container">
+    <h2 class="titulo">🍰 Gestión de Productos</h2>
+
+    <div class="text-center">
+        <a href="{{ url_for('agregar_producto') }}" class="btn-add shadow">➕ Agregar Producto</a>
+    </div>
+
+    <div class="row g-4">
+        {% if postres %}
+            {% for p in postres %}
+            <div class="col-md-3 col-sm-6">
+                <div class="card-producto">
+                    <img src="{{ url_for('static', filename='img/' ~ p.imagen) }}" alt="{{ p.nombre }}">
+                    <h5 class="fw-bold">{{ p.nombre }}</h5>
+                    <p class="precio">${{ p.precio }}</p>
+                    <p class="text-muted">Stock: {{ p.stock }}</p>
+                    <div class="acciones-btn d-flex justify-content-between">
+                        <a href="{{ url_for('editar_producto', id=p.id) }}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                        <a href="{{ url_for('eliminar_producto', id=p.id) }}" class="btn btn-danger btn-sm">🗑️ Eliminar</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center text-white fs-5">⚠️ No hay productos registrados</p>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-light shadow">⬅️ Volver al Panel</a>
+    </div>
+</div>
+
+<!-- ✅ Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+
+
