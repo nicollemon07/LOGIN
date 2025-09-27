@@ -1,0 +1,55 @@
+/* profile.css */
+
+body {
+    margin: 0;
+    background: linear-gradient(-45deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+    background-size: 400% 400%;
+    animation: gradientBackground 10s ease infinite;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.perfil-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.perfil-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+.perfil-card img {
+    border: 4px solid #9333ea;
+}
+
+.btn-primary {
+    background-color: #9333ea;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #7e22ce;
+}
+
+.btn-outline-danger {
+    border-color: #9333ea;
+    color: #9333ea;
+}
+
+.btn-outline-danger:hover {
+    background-color: #9333ea;
+    color: white;
+}

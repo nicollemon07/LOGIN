@@ -1,0 +1,41 @@
+/* manage_users.css */
+
+body {
+    margin: 0;
+    background: linear-gradient(-45deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.admin-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    margin: 50px auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    max-width: 800px;
+    width: 100%;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.admin-card h2 {
+    color: #6b21a8;
+    font-weight: bold;
+}
+
+.btn-sm {
+    border-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

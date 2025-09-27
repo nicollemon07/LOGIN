@@ -1,0 +1,45 @@
+/* vitrina.css */
+
+body {
+    margin: 0;
+    background: linear-gradient(-45deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+    background-size: 400% 400%;
+    animation: gradientBackground 10s ease infinite;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.vitrina-container {
+    padding: 3rem 1rem;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    border-radius: 1rem 1rem 0 0;
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-primary {
+    background-color: #9333ea;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #7e22ce;
+}
