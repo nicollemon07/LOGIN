@@ -14,11 +14,6 @@
             <p><strong>Fecha:</strong> {{ fecha }}</p>
         </div>
 
-        <div class="factura-info">
-            <p><strong>Cliente:</strong> {{ usuario.nombre if usuario else "Invitado" }}</p>
-            <p><strong>Correo:</strong> {{ usuario.correo if usuario else "Sin correo" }}</p>
-        </div>
-
         <table class="table table-bordered text-center">
             <thead>
                 <tr>
@@ -40,12 +35,20 @@
             </tbody>
         </table>
 
-        <p class="total">Total: ${{ "%.2f"|format(total) }}</p>
+        <p class="total"><strong>Total:</strong> ${{ "%.2f"|format(total) }}</p>
+        <p><strong>Método de pago:</strong> {{ metodo_pago }}</p>
 
         <div class="firma">
             <p>Gracias por su compra 🧁</p>
         </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('pqrs') }}" class="btn btn-outline-primary">
+                📩 Enviar PQRS
+            </a>
+        </div>        
     </div>
 </body>
 </html>
+
+
 

@@ -1,0 +1,27 @@
+body {
+    background: linear-gradient(135deg, #d8b4fe, #c084fc, #a855f7, #9333ea);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    background-color: #9333ea;
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+.btn-primary {
+    background-color: #9333ea;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #7e22ce;
+}

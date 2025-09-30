@@ -295,7 +295,7 @@ def olvide_password():
         if user:
             # ✅ Generar código OTP de 6 dígitos
             codigo = str(random.randint(100000, 999999))
-            expiracion = datetime.datetime.now() + datetime.timedelta(minutes=10)
+            expiracion = datetime.now() + timedelta(minutes=10)
 
             # Guardar en BD
             cursor.execute("""
@@ -318,15 +318,18 @@ Este código expirará en 10 minutos.
 
             flash("✅ Te hemos enviado un código a tu correo", "success")
             session['reset_user_id'] = user['id']  # Guardamos el user_id en la sesión
+            cursor.close()
+            conn.close()
             return redirect(url_for('validar_codigo'))
 
         else:
             flash("❌ El correo no está registrado", "danger")
-
-        cursor.close()
-        conn.close()
+            cursor.close()
+            conn.close()
 
     return render_template('olvide_password.html')
+
+from datetime import datetime
 
 @app.route('/validar-codigo', methods=['GET', 'POST'])
 def validar_codigo():
@@ -349,8 +352,10 @@ def validar_codigo():
 
         if registro:
             # Validar expiración
-            if registro['expiracion'] < datetime.datetime.now():
+            if registro['expiracion'] < datetime.now():
                 flash("❌ El código ha expirado", "danger")
+                cursor.close()
+                conn.close()
                 return redirect(url_for('olvide_password'))
 
             # Marcar como usado
@@ -358,6 +363,8 @@ def validar_codigo():
             conn.commit()
 
             flash("✅ Código validado. Ahora puedes restablecer tu contraseña", "success")
+            cursor.close()
+            conn.close()
             return redirect(url_for('reset_password', id=user_id))
 
         else:
@@ -367,6 +374,7 @@ def validar_codigo():
         conn.close()
 
     return render_template('validar_codigo.html')
+
 
 
 @app.route('/reset-password/<int:id>', methods=['GET', 'POST'])
@@ -567,29 +575,19 @@ from datetime import datetime   # ✅ Importación corregida
 from datetime import datetime
 
 from datetime import datetime
-
 @app.route("/factura")
 def factura():
     carrito = session.get("carrito", [])
     total = sum(item["precio"] * item["cantidad"] for item in carrito)
-    fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
+    metodo_pago = session.get("metodo_pago", "No seleccionado")
 
-    usuario = None
-    if 'user_id' in session:
-        conn = get_db_connection()
-        cur = conn.cursor(dictionary=True)
-        cur.execute("SELECT nombre, correo FROM usuarios WHERE id = %s", (session['user_id'],))
-        usuario = cur.fetchone()
-        cur.close()
-        conn.close()
-
-    # ✅ Agrega prints para depurar en consola
-    print("🛒 Carrito:", carrito)
-    print("👤 Usuario:", usuario)
-    print("💰 Total:", total)
-    print("🕒 Fecha:", fecha)
-
-    return render_template("factura.html", carrito=carrito, usuario=usuario, total=total, fecha=fecha)
+    return render_template(
+        "factura.html",
+        carrito=carrito,
+        total=total,
+        metodo_pago=metodo_pago,
+        fecha=datetime.now().strftime("%d/%m/%Y")
+    )
 
 @app.route('/mis-pedidos')
 def mis_pedidos():
@@ -738,7 +736,81 @@ def eliminar_producto(id):
     flash("Producto eliminado correctamente", "success")
     return redirect(url_for("admin_productos"))
 
+@app.route("/pago", methods=["GET", "POST"])
+def seleccionar_pago():
+    if request.method == "POST":
+        metodo_pago = request.form.get("metodo_pago")
+        session["metodo_pago"] = metodo_pago  # Guardar en sesión
 
+        # Guardar pedido en la base de datos
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+            # Calcular total del carrito
+            carrito = session.get("carrito", [])
+            total = sum(item["precio"] * item["cantidad"] for item in carrito)
+
+            cursor.execute("""
+                INSERT INTO pedidos (usuario_id, total, metodo_pago, fecha)
+                VALUES (%s, %s, %s, %s)
+            """, (
+                session.get("usuario_id", None),  # Si no hay login, se guarda NULL
+                total,
+                metodo_pago,
+                datetime.now()
+            ))
+
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+        except Exception as e:
+            print("❌ Error guardando en la BD:", e)
+            flash("Hubo un error guardando tu pedido", "danger")
+
+        return redirect(url_for("factura"))  # Va a la factura
+
+    return render_template("pago.html")
+
+@app.route("/pago", methods=["GET", "POST"])
+def pago():
+    if request.method == "POST":
+        metodo = request.form.get("metodo_pago")  # capturamos lo que eligió el cliente
+        session["metodo_pago"] = metodo  # lo guardamos en sesión
+        return redirect(url_for("factura"))  # mandamos al cliente a ver la factura
+    
+    return render_template("pago.html")
+
+@app.route("/pqrs", methods=["GET", "POST"])
+def pqrs():
+    if request.method == "POST":
+        nombre = request.form["nombre"]
+        correo = request.form["correo"]
+        tipo = request.form["tipo"]
+        mensaje = request.form["mensaje"]
+
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="",
+                database="flask_login"
+            )
+            cursor = conexion.cursor()
+            cursor.execute(
+                "INSERT INTO pqrs (nombre, correo, tipo, mensaje) VALUES (%s, %s, %s, %s)",
+                (nombre, correo, tipo, mensaje)
+            )
+            conexion.commit()
+            cursor.close()
+            conexion.close()
+            flash("✅ Tu PQRS fue enviado correctamente.", "success")
+            return redirect(url_for("pqrs"))
+        except Error as e:
+            flash(f"❌ Error al guardar PQRS: {e}", "danger")
+
+    return render_template("pqrs.html")
 
 # -------------------- MAIN --------------------
 if __name__ == '__main__':

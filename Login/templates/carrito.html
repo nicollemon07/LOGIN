@@ -44,9 +44,9 @@
                 Total: $ {{ "%.0f"|format(total) }}
             </div>
 
-            <div class="text-center">
-                <a href="{{ url_for('factura') }}" class="btn-lila">✅ Finalizar compra</a>
-            </div>
+            <!-- usar un link o form GET -->
+<a href="{{ url_for('seleccionar_pago') }}" class="btn btn-success">Finalizar compra</a>
+
 
         {% else %}
             <p class="empty-cart">Tu carrito está vacío 😢</p>
