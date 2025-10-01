@@ -17,7 +17,7 @@
             {% for p in postres %}
             <div class="col-md-3 col-sm-6">
                 <div class="card-producto">
-                    <img src="{{ url_for('static', filename='img/' ~ p.imagen) }}" alt="{{ p.nombre }}">
+                    <img src="{{ url_for('static', filename=p.imagen_url) }}" alt="{{ p.nombre }}">
                     <h5 class="fw-bold">{{ p.nombre }}</h5>
                     <p class="precio">${{ p.precio }}</p>
                     <p class="text-muted">Stock: {{ p.stock }}</p>
@@ -41,6 +41,7 @@
 <!-- ✅ Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
+
 
 
 
