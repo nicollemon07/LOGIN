@@ -812,6 +812,18 @@ def pqrs():
 
     return render_template("pqrs.html")
 
+@app.route("/admin/pqrs")
+def admin_pqrs():
+    conn = mysql.connector.connect(
+        host="localhost", user="root", password="", database="flask_login"
+    )
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM pqrs ORDER BY fecha DESC")
+    pqrs_list = cursor.fetchall()
+    conn.close()
+
+    return render_template("admin/admin_pqrs.html", pqrs_list=pqrs_list)
+
 # -------------------- MAIN --------------------
 if __name__ == '__main__':
     app.run(debug=True)

@@ -51,6 +51,13 @@
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">Enviar PQRS</button>
           </div>
+          <div class="mt-4 d-flex justify-content-between">
+            <!-- Botón para regresar -->
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">⬅️ Regresar</a>
+        
+            <!-- Botón para cerrar sesión -->
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">🚪 Cerrar sesión</a>
+        </div>        
         </form>
       </div>
     </div>
