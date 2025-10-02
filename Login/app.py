@@ -31,12 +31,7 @@ def get_db_connection():
         port=int(os.environ.get('DB_PORT', 3306))
     )
 
-# -------------------- HOME --------------------
-@app.route('/')
-def home():
-    if 'user_id' in session:
-        return render_template('home.html', nombre=session.get('user'), rol=session.get('rol'))
-    return redirect(url_for('login'))
+
 
 # -------------------- REGISTRO --------------------
 @app.route('/register', methods=['GET', 'POST'])
@@ -823,6 +818,21 @@ def admin_pqrs():
     conn.close()
 
     return render_template("admin/admin_pqrs.html", pqrs_list=pqrs_list)
+
+@app.route('/')
+def bienvenida():
+    # Conexión a la BD para traer los productos
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT id, nombre, precio, imagen_url FROM postres")
+    postres = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    # Renderizamos la página de bienvenida (pública)
+    return render_template('bienvenida.html', postres=postres)
+
+
 
 # -------------------- MAIN --------------------
 if __name__ == '__main__':

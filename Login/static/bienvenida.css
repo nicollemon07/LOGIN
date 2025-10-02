@@ -1,0 +1,150 @@
+/* FONDO Y FUENTE */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background: #fff;
+  }
+  
+  /* NAVBAR */
+  .navbar {
+    width: 100%;
+    background: linear-gradient(90deg, #9333ea, #7e22ce);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .navbar a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar a:hover {
+    color: #d8b4fe;
+  }
+  
+  /* HERO */
+  .hero {
+    background: url("../img/hero.jpg") no-repeat center center/cover;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  
+  .hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+  }
+  
+  .hero-text {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
+  
+  .btn-lila {
+    background-color: #9333ea;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-lila:hover {
+    background-color: #7e22ce;
+    transform: scale(1.05);
+  }
+  
+  /* SECCIÓN PRODUCTOS */
+  .section-title {
+    text-align: center;
+    margin: 3rem 0 2rem;
+    font-weight: 800;
+    color: #6b21a8;
+  }
+  
+  .card {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-8px);
+  }
+  
+  .card-title {
+    font-weight: 700;
+    color: #6b21a8;
+  }
+  
+  .card-text {
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+  }
+  
+  .precio {
+    color: #9333ea;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* ABOUT */
+  .about {
+    background: #f8f5ff;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  
+  .about h2 {
+    color: #6b21a8;
+    margin-bottom: 1rem;
+  }
+  
+  .about p {
+    max-width: 800px;
+    margin: auto;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+  
+  /* FOOTER */
+  footer {
+    background: #7e22ce;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+  }
+  
