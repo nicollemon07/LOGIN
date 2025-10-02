@@ -786,45 +786,89 @@ def pqrs():
         mensaje = request.form["mensaje"]
 
         try:
-            conexion = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="",
-                database="flask_login"
-            )
-            cursor = conexion.cursor()
+            conn = get_db_connection()
+            cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO pqrs (nombre, correo, tipo, mensaje) VALUES (%s, %s, %s, %s)",
+                "INSERT INTO pqrs (nombre, correo, tipo, mensaje, fecha) VALUES (%s, %s, %s, %s, NOW())",
                 (nombre, correo, tipo, mensaje)
             )
-            conexion.commit()
+            conn.commit()
             cursor.close()
-            conexion.close()
+            conn.close()
             flash("✅ Tu PQRS fue enviado correctamente.", "success")
             return redirect(url_for("pqrs"))
         except Error as e:
             flash(f"❌ Error al guardar PQRS: {e}", "danger")
 
-    return render_template("pqrs.html")
-
-@app.route("/admin/pqrs")
-def admin_pqrs():
-    conn = mysql.connector.connect(
-        host="localhost", user="root", password="", database="flask_login"
-    )
+    # Mostrar PQRS enviadas y sus respuestas (opcional)
+    conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM pqrs ORDER BY fecha DESC")
     pqrs_list = cursor.fetchall()
+
+    # Obtener respuestas
+    for pqrs_item in pqrs_list:
+        cursor.execute("SELECT respuesta, fecha FROM pqrs_respuestas WHERE pqrs_id=%s ORDER BY fecha ASC", (pqrs_item["id"],))
+        pqrs_item["respuestas"] = cursor.fetchall()
+
+    cursor.close()
     conn.close()
 
+    return render_template("pqrs.html", pqrs_list=pqrs_list)
+
+
+# Vista admin: PQRS pendientes y responder
+@app.route("/admin/pqrs")
+def admin_pqrs():
+    if 'rol' not in session or session['rol'] != 'admin':
+        flash("Acceso denegado", "danger")
+        return redirect(url_for('home'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Traemos PQRS con sus respuestas
+    cursor.execute("SELECT * FROM pqrs ORDER BY fecha DESC")
+    pqrs_list = cursor.fetchall()
+
+    for pqrs_item in pqrs_list:
+        cursor.execute("SELECT * FROM pqrs_respuestas WHERE pqrs_id=%s ORDER BY fecha ASC", (pqrs_item["id"],))
+        pqrs_item["respuestas"] = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
     return render_template("admin/admin_pqrs.html", pqrs_list=pqrs_list)
+
+# Ruta para enviar respuesta de admin
+@app.route("/admin/pqrs/responder/<int:pqrs_id>", methods=["POST"])
+def responder_pqrs(pqrs_id):
+    if 'rol' not in session or session['rol'] != 'admin':
+        flash("Acceso denegado", "danger")
+        return redirect(url_for('home'))
+
+    respuesta = request.form["respuesta"]
+    admin_id = session["user_id"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO pqrs_respuestas (pqrs_id, admin_id, respuesta, fecha) VALUES (%s, %s, %s, NOW())",
+        (pqrs_id, admin_id, respuesta)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash("✅ Respuesta enviada correctamente.", "success")
+    return redirect(url_for("admin_pqrs"))
+
 
 @app.route('/')
 def bienvenida():
     # Conexión a la BD para traer los productos
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT id, nombre, precio, imagen_url FROM postres")
+    cursor.execute("SELECT id, nombre, precio, imagen_url, descripcion FROM postres")
     postres = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -832,6 +876,16 @@ def bienvenida():
     # Renderizamos la página de bienvenida (pública)
     return render_template('bienvenida.html', postres=postres)
 
+
+# -------------------- HOME / POST-LOGIN --------------------
+@app.route('/home')
+def home():
+    if 'user_id' not in session:
+        flash("Debes iniciar sesión para acceder aquí.", "warning")
+        return redirect(url_for('login'))
+
+    nombre = session.get('user', 'Usuario')
+    return render_template('home.html', nombre=nombre)
 
 
 # -------------------- MAIN --------------------
