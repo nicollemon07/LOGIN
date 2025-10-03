@@ -33,10 +33,18 @@
                 🛍️ Vitrina
             </button>
         </form>
+        
+        <form method="GET" action="{{ url_for('pqrs') }}" class="mb-3">
+            <button type="submit" class="btn btn-warning w-100 rounded-3">
+                📬 PQRS
+            </button>
+        </form>
+        
         <div class="mt-4">
             <!-- Botón para regresar -->
             <a href="{{ url_for('home') }}" class="btn btn-secondary">⬅️ Regresar</a>
         </div>
+        
         
 
         <hr class="my-4">
