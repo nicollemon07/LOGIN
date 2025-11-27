@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+
+<div class="perfil-container">
+    <div class="perfil-card text-center">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+            alt="Foto de perfil" 
+            class="rounded-circle mb-3" width="120">
+
+        <h4 class="fw-bold text-primary mb-1">{{ usuario['nombre'] }}</h4>
+        <p class="text-muted small mb-4">{{ usuario['correo'] }}</p>
+
+        <form method="POST" action="{{ url_for('actualizar_perfil') }}" class="text-start mb-3">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Nombre</label>
+                <input type="text" class="form-control rounded-3" name="nombre" value="{{ usuario['nombre'] }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Correo electrónico</label>
+                <input type="email" class="form-control rounded-3" name="correo" value="{{ usuario['correo'] }}">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 rounded-3">
+                💾 Guardar cambios
+            </button>
+        </form>
+
+        <form method="GET" action="{{ url_for('vitrina') }}" class="mb-3">
+            <button type="submit" class="btn btn-primary w-100 rounded-3">
+                🛍️ Vitrina
+            </button>
+        </form>
+        
+        <form method="GET" action="{{ url_for('pqrs') }}" class="mb-3">
+            <button type="submit" class="btn btn-warning w-100 rounded-3">
+                📬 PQRS
+            </button>
+        </form>
+        
+        <div class="mt-4">
+            <!-- Botón para regresar -->
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">⬅️ Regresar</a>
+        </div>
+        
+        
+
+        <hr class="my-4">
+
+        <form method="POST" action="{{ url_for('eliminar_cuenta') }}">
+            <button type="submit" class="btn btn-outline-danger w-100 rounded-3">
+                🗑️ Eliminar cuenta
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+

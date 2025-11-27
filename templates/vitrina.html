@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='vitrina.css') }}">
+
+<div class="vitrina-container">
+    <div class="text-end mb-3">
+        <a href="{{ url_for('ver_carrito') }}" class="btn btn-light fw-bold shadow">
+            🛍️ Ver carrito
+        </a>
+    </div>
+
+    <h1 class="text-center text-white fw-bold mb-5">🍰 Vitrina de Postres</h1>
+
+    <div class="container">
+        <div class="row g-4">
+            {% for postre in postres %}
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100">
+                    <img src="{{ url_for('static', filename=postre[3]) }}" alt="{{ postre[1] }}">
+                    <div class="card-body text-center">
+                        <h5 class="fw-bold">{{ postre[1] }}</h5>
+                        <p class="text-success fw-semibold mb-3">$ {{ "%.0f"|format(postre[2]) }}</p>
+                        <a href="{{ url_for('agregar_carrito', id_postre=postre[0]) }}" class="btn btn-primary w-100 rounded-3">
+                            🛒 Agregar al carrito
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center mt-5">
+    <a href="javascript:history.back()" class="btn btn-secondary btn-lg">
+        ⬅️ Regresar
+    </a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

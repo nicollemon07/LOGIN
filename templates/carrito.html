@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}">
+
+<div class="cart-container">
+    <div class="cart-card">
+        <h2>🛍️ Tu Carrito</h2>
+
+        {% if carrito %}
+            {% for item in carrito %}
+            <div class="cart-item">
+                <img src="{{ url_for('static', filename=item.imagen) }}" alt="{{ item.nombre }}">
+                <div class="cart-details">
+                    <p class="cart-name">{{ item.nombre }}</p>
+
+                    <div class="quantity-controls">
+                        <form method="POST" action="{{ url_for('disminuir_cantidad', id_postre=item.id) }}">
+                            <button type="submit">−</button>
+                        </form>
+
+                        <span class="quantity-number">{{ item.cantidad }}</span>
+
+                        <form method="POST" action="{{ url_for('incrementar_cantidad', id_postre=item.id) }}">
+                            <button type="submit">+</button>
+                        </form>
+                    </div>
+
+                    <p class="cart-price">
+                        ${{ "%.0f"|format(item.precio) }} x {{ item.cantidad }} =
+                        <strong>${{ "%.0f"|format(item.precio * item.cantidad) }}</strong>
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ url_for('eliminar_carrito', id_postre=item.id) }}">
+                    <button type="submit" class="btn-remove" title="Eliminar producto">✖</button>
+                </form>
+            </div>
+            {% endfor %}
+
+            <div class="cart-total">
+                Total: $ {{ "%.0f"|format(total) }}
+            </div>
+
+            <!-- usar un link o form GET -->
+<a href="{{ url_for('seleccionar_pago') }}" class="btn btn-success">Finalizar compra</a>
+<div class="d-flex justify-content-center mt-5">
+    <a href="javascript:history.back()" class="btn btn-secondary btn-lg">
+        ⬅️ Regresar
+    </a>
+</div>
+        {% else %}
+            <p class="empty-cart">Tu carrito está vacío 😢</p>
+        {% endif %}
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
