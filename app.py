@@ -8,6 +8,8 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'secreto123')
 
+
+
 # ---------------- CONFIGURACIÓN DE FLASK-MAIL ----------------
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
