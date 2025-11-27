@@ -22,6 +22,13 @@ app.config['MAIL_DEFAULT_SENDER'] = ('Soporte App', 'nicollmon2007@gmail.com')
 mail = Mail(app)
 # --------------------------------------------------------------
 
+@app.route('/')
+def index():
+    return render_template('login.html', title='Index')
+
+@app.route('/index')
+def index2():
+    return render_template('login.html', title='Index')
 
 # Conexión a MySQL
 def get_db_connection():
